@@ -1,6 +1,4 @@
 {
-    "_comment":"Since in JSON comments are not officially supported the explanation of codes below is in README file",
-    
     "manifest_version": 3, 
     "name": "Auto Form Filler",
     "version": "1.0",
