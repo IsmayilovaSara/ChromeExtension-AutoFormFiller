@@ -251,3 +251,66 @@ document.addEventListener("DOMContentLoaded", ()=>{
     loadFields();
     
     });
+
+document.addEventListener("DOMContentLoaded", () => {
+    const mapFieldBtn = document.getElementById("map-field-btn");
+    const linkedinFieldSelect = document.getElementById("linkedin-field");
+    const formFieldSelect = document.getElementById("form-field");
+
+    let fieldMappings = {};
+
+   
+    function loadMappings() {
+        chrome.storage.local.get("fieldMappings", (result) => {
+            fieldMappings = result.fieldMappings || {}; 
+        });
+    }
+
+    // Map LinkedIn field to form field
+    mapFieldBtn.addEventListener("click", () => {
+        const linkedinField = linkedinFieldSelect.value;
+        const formField = formFieldSelect.value;
+
+        
+        if (!linkedinField || !formField) {
+            alert("Please select both a LinkedIn field and a form field.");
+            return;
+        }
+
+        // Check if the mapping already exists
+        if (fieldMappings[linkedinField]) {
+            alert(`The LinkedIn field "${linkedinField}" is already mapped to "${fieldMappings[linkedinField]}".`);
+        } else {
+            fieldMappings[linkedinField] = formField;
+            chrome.storage.local.set({ fieldMappings }, () => {
+                alert(`Mapped LinkedIn field "${linkedinField}" to form field "${formField}".`);
+            });
+        }
+    });
+
+    
+    function fillFormBasedOnMapping(linkedinData) {
+        for (const linkedinField in fieldMappings) {
+            const formField = fieldMappings[linkedinField];
+            const value = linkedinData[linkedinField];
+
+            if (value !== undefined) { // Check if the LinkedIn data exists for the field
+                const fieldElement = document.getElementById(formField);
+                if (fieldElement) {
+                    if (formField === 'work-history') {
+                        fieldElement.value = value; // Example for Work History
+                    } else if (formField === 'education-history') {
+                        fieldElement.value = value; // Example for Education History
+                    } else {
+                        fieldElement.value = value; // For other fields
+                    }
+                } else {
+                    console.warn(`Form field with ID "${formField}" not found.`);
+                }
+            }
+        }
+    }
+
+    // Load mappings when the DOM is ready
+    loadMappings();
+});
