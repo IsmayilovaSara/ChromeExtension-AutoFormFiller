@@ -48,3 +48,11 @@ input
 {
     text-align: center;
 }
+
+a {
+    color: #007bff;
+    text-decoration: underline;
+}
+a:hover {
+    color: #0056b3;
+}

@@ -8,13 +8,22 @@
 </head>
 <body>
     <h1>Data Fields</h1>
+
+    <div>
+        <h2>Profiles</h2>
+        <select id="profile-selector"></select>
+        <button id="create-profile-btn">Create Profile</button>
+    </div>
+    
     <div id="field-list">
-        <!--Dynamically generated fields-->
     </div>
     <button id="add-field-btn">Add new field</button>
     <div id="new-field-form" style="display: none;">
         <input type="text" id="field-name" placeholder="Field Name">
         <input type="text" id="field-value" placeholder="Field Value">
+        <input type="file" id="file-input" placeholder="display: none">
+        <input type="url" id="link-input" placeholder="Portfolio Link" style="display:none;">
+        <input type="file" id="file-input" style="display: none;" accept=".pdf, .docx, .jpg">
         <button id="save-field-btn">Save</button>
     </div>
     <script src="popup.js"></script>
