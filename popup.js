@@ -314,3 +314,58 @@ document.addEventListener("DOMContentLoaded", () => {
     // Load mappings when the DOM is ready
     loadMappings();
 });
+document.addEventListener("DOMContentLoaded", () => {
+    const generateCoverLetterBtn = document.getElementById("generate-cover-letter-btn");
+    const coverLetterOutput = document.getElementById("cover-letter-output");
+    const jobTitleInput = document.getElementById("job-title-input"); // New input for job title
+    const companyNameInput = document.getElementById("company-name-input"); // New input for company name
+
+    // Function to generate a cover letter
+    async function generateCoverLetter() {
+        const jobTitle = jobTitleInput.value.trim(); // Get job title from the input
+        const companyName = companyNameInput.value.trim(); // Get company name from the input
+
+        if (!jobTitle || !companyName) {
+            alert("Job title and company name are required to generate a cover letter.");
+            return;
+        }
+
+        // AI API to generate the cover letter
+        try {
+            const response = await fetch("https://api.example.com/generate-cover-letter", {  
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ jobTitle, companyName }),
+            });
+
+            if (!response.ok) {
+                throw new Error("Network response was not ok");
+            }
+
+            const data = await response.json();
+            coverLetterOutput.value = data.coverLetter; 
+        } catch (error) {
+            console.error("Error generating cover letter:", error);
+            alert("Failed to generate cover letter. Please try again.");
+        }
+    }
+
+    
+    generateCoverLetterBtn.addEventListener("click", generateCoverLetter);
+
+    
+    document.getElementById("save-cover-letter-btn").addEventListener("click", () => {
+        const coverLetter = coverLetterOutput.value.trim();
+        if (!coverLetter) {
+            alert("No cover letter to save.");
+            return;
+        }
+
+        // Save the cover letter to local storage or wherever appropriate
+        chrome.storage.local.set({ coverLetter }, () => {
+            alert("Cover letter saved successfully!");
+        });
+    });
+});
