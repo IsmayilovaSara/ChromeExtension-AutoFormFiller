@@ -59,6 +59,23 @@
         <textarea id="cover-letter-output" placeholder="Your cover letter will appear here" rows="10" cols="50"></textarea>
         <button id="save-cover-letter-btn">Save Cover Letter</button>
     </div>
+    <h2>Job Application Tracking Dashboard</h2>
+    <div id="job-application-dashboard">
+        <input type="text" id="company-name" placeholder="Company Name">
+        <input type="text" id="job-title" placeholder="Job Title">
+        <input type="date" id="date-applied" placeholder="Date Applied">
+        <select id="application-status">
+            <option value="applied">Applied</option>
+            <option value="interview-scheduled">Interview Scheduled</option>
+            <option value="offer-received">Offer Received</option>
+            <option value="rejected">Rejected</option>
+        </select>
+        <textarea id="notes" placeholder="Notes"></textarea>
+        <button id="add-application-btn">Add Application</button>
+        
+        <h3>Submitted Applications:</h3>
+        <ul id="application-list"></ul>
+    </div>
     <script src="popup.js"></script>
 
 </body>
