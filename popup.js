@@ -404,3 +404,99 @@ document.getElementById('add-application-btn').addEventListener('click', functio
     document.getElementById('application-status').value = 'applied';
     document.getElementById('notes').value = '';
 });
+// Sample data structure to hold your application data
+let applicationData = {
+    profiles: [],
+    fields: [],
+    coverLetters: [],
+    jobApplications: []
+};
+
+// export data as JSON
+document.getElementById('export-data-json-btn').addEventListener('click', () => {
+    const dataStr = JSON.stringify(applicationData, null, 2);
+    const blob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'application_data.json';
+    a.click();
+    URL.revokeObjectURL(url);
+});
+
+//  export data as CSV
+document.getElementById('export-data-csv-btn').addEventListener('click', () => {
+    const csvData = convertToCSV(applicationData);
+    const blob = new Blob([csvData], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'application_data.csv';
+    a.click();
+    URL.revokeObjectURL(url);
+});
+
+// convert application data to CSV format
+function convertToCSV(data) {
+    const fields = ['Profile', 'Field', 'Cover Letter', 'Job Application']; // Customize based on your data structure
+    let csv = fields.join(',') + '\n';
+    
+    // Add profiles
+    data.profiles.forEach(profile => {
+        csv += `${profile},,,\n`; // Customize based on your profile structure
+    });
+
+    // Add fields
+    data.fields.forEach(field => {
+        csv += `,,${field},\n`; // Customize based on your field structure
+    });
+
+    // Add cover letters
+    data.coverLetters.forEach(letter => {
+        csv += `,,,${letter}\n`; // Customize based on your cover letter structure
+    });
+
+    // Add job applications
+    data.jobApplications.forEach(application => {
+        csv += `,,,${application.companyName},${application.jobTitle},${application.dateApplied},${application.status}\n`; // Customize based on your application structure
+    });
+
+    return csv;
+}
+
+// import data
+document.getElementById('import-data-btn').addEventListener('click', () => {
+    const fileInput = document.getElementById('import-data-file');
+    const file = fileInput.files[0];
+    
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            const data = JSON.parse(event.target.result);
+            applicationData = data; 
+            alert('Data imported successfully!');
+            
+        };
+        reader.readAsText(file);
+    } else {
+        alert('Please select a file to import.');
+    }
+});
+
+// send data via email 
+document.getElementById('send-data-email-btn').addEventListener('click', () => {
+    const email = document.getElementById('email-input').value;
+    
+    if (!email) {
+        alert('Please enter an email address.');
+        return;
+    }
+    
+    const dataStr = JSON.stringify(applicationData, null, 2);
+    
+
+    alert(`Data sent to ${email}:\n\n${dataStr}`);
+    
+});
