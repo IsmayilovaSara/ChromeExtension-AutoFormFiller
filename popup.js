@@ -320,7 +320,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const jobTitleInput = document.getElementById("job-title-input"); // New input for job title
     const companyNameInput = document.getElementById("company-name-input"); // New input for company name
 
-    // Function to generate a cover letter
+   
     async function generateCoverLetter() {
         const jobTitle = jobTitleInput.value.trim(); // Get job title from the input
         const companyName = companyNameInput.value.trim(); // Get company name from the input
@@ -330,7 +330,7 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        // AI API to generate the cover letter
+        // AI to generate cover letter
         try {
             const response = await fetch("https://api.example.com/generate-cover-letter", {  
                 method: "POST",
@@ -352,7 +352,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    
+    //  Job Application Tracking Dashboard
     generateCoverLetterBtn.addEventListener("click", generateCoverLetter);
 
     
@@ -363,9 +363,44 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        // Save the cover letter to local storage or wherever appropriate
+        // Save  cover letter to local storage 
         chrome.storage.local.set({ coverLetter }, () => {
             alert("Cover letter saved successfully!");
         });
     });
+});
+document.getElementById('add-application-btn').addEventListener('click', function() {
+    const companyName = document.getElementById('company-name').value;
+    const jobTitle = document.getElementById('job-title').value;
+    const dateApplied = document.getElementById('date-applied').value;
+    const applicationStatus = document.getElementById('application-status').value;
+    const notes = document.getElementById('notes').value;
+
+    const applicationList = document.getElementById('application-list');
+    const listItem = document.createElement('li');
+    listItem.textContent = `${jobTitle} at ${companyName} (Applied on: ${dateApplied}, Status: ${applicationStatus}, Notes: ${notes})`;
+    
+    // Create  dropdown to update status
+    const statusSelect = document.createElement('select');
+    ['applied', 'interview-scheduled', 'offer-received', 'rejected'].forEach(status => {
+        const option = document.createElement('option');
+        option.value = status;
+        option.textContent = status.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+        statusSelect.appendChild(option);
+    });
+    
+    statusSelect.value = applicationStatus;
+    statusSelect.addEventListener('change', function() {
+        listItem.textContent = `${jobTitle} at ${companyName} (Applied on: ${dateApplied}, Status: ${statusSelect.value}, Notes: ${notes})`;
+    });
+
+    listItem.appendChild(statusSelect);
+    applicationList.appendChild(listItem);
+
+    
+    document.getElementById('company-name').value = '';
+    document.getElementById('job-title').value = '';
+    document.getElementById('date-applied').value = '';
+    document.getElementById('application-status').value = 'applied';
+    document.getElementById('notes').value = '';
 });
