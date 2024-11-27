@@ -368,6 +368,68 @@ document.addEventListener("DOMContentLoaded", () => {
             alert("Cover letter saved successfully!");
         });
     });
+
+
+
+
+/*  incomplete code below - for SubTask 6
+    document.getElementById("saveForm").addEventListener("click", () => {
+       
+        const formData = {};
+        document.querySelectorAll("form input, form select, form textarea").forEach(field => {
+            formData[field.name] = field.value;
+        });
+    
+        const timestamp = new Date().toISOString();
+        const savedForm = {
+            id: timestamp,
+            data: formData,
+            saveDate: timestamp,
+            formName: "Job Application Form" 
+        };
+    
+        
+        chrome.storage.sync.get({ savedForms: [] }, (result) => {
+            const updatedForms = [...result.savedForms, savedForm];
+            chrome.storage.sync.set({ savedForms: updatedForms }, () => {
+                alert("Form saved successfully!");
+            });
+        });
+    });
+
+
+    document.getElementById("loadHistory").addEventListener("click", () => {
+        chrome.storage.sync.get({ savedForms: [] }, (result) => {
+            const historyContainer = document.getElementById("historyContainer");
+            historyContainer.innerHTML = ""; 
+    
+            result.savedForms.forEach(form => {
+                const formDiv = document.createElement("div");
+                formDiv.innerHTML = `
+                    <p><strong>Form Name:</strong> ${form.formName}</p>
+                    <p><strong>Saved On:</strong> ${new Date(form.saveDate).toLocaleString()}</p>
+                    <button data-id="${form.id}" class="loadForm">Load</button>
+                    <button data-id="${form.id}" class="deleteForm">Delete</button>
+                `;
+                historyContainer.appendChild(formDiv);
+            });
+    
+            
+            document.querySelectorAll(".loadForm").forEach(button => {
+                button.addEventListener("click", loadForm);
+            });
+            document.querySelectorAll(".deleteForm").forEach(button => {
+                button.addEventListener("click", deleteForm);
+            });
+        });
+    });
+
+    */
+    
+    
+
+
+    
 });
 document.getElementById('add-application-btn').addEventListener('click', function() {
     const companyName = document.getElementById('company-name').value;
@@ -500,3 +562,5 @@ document.getElementById('send-data-email-btn').addEventListener('click', () => {
     alert(`Data sent to ${email}:\n\n${dataStr}`);
     
 });
+
+
