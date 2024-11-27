@@ -442,7 +442,7 @@ document.getElementById('add-application-btn').addEventListener('click', functio
     const listItem = document.createElement('li');
     listItem.textContent = `${jobTitle} at ${companyName} (Applied on: ${dateApplied}, Status: ${applicationStatus}, Notes: ${notes})`;
     
-    // Create  dropdown to update status
+    // dropdown to update status
     const statusSelect = document.createElement('select');
     ['applied', 'interview-scheduled', 'offer-received', 'rejected'].forEach(status => {
         const option = document.createElement('option');
@@ -466,7 +466,7 @@ document.getElementById('add-application-btn').addEventListener('click', functio
     document.getElementById('application-status').value = 'applied';
     document.getElementById('notes').value = '';
 });
-// Sample data structure to hold your application data
+// Create sample data  to hold your application data
 let applicationData = {
     profiles: [],
     fields: [],
@@ -502,22 +502,22 @@ document.getElementById('export-data-csv-btn').addEventListener('click', () => {
 
 // convert application data to CSV format
 function convertToCSV(data) {
-    const fields = ['Profile', 'Field', 'Cover Letter', 'Job Application']; // Customize based on your data structure
+    const fields = ['Profile', 'Field', 'Cover Letter', 'Job Application']; 
     let csv = fields.join(',') + '\n';
     
     // Add profiles
     data.profiles.forEach(profile => {
-        csv += `${profile},,,\n`; // Customize based on your profile structure
+        csv += `${profile},,,\n`; 
     });
 
     // Add fields
     data.fields.forEach(field => {
-        csv += `,,${field},\n`; // Customize based on your field structure
+        csv += `,,${field},\n`; 
     });
 
     // Add cover letters
     data.coverLetters.forEach(letter => {
-        csv += `,,,${letter}\n`; // Customize based on your cover letter structure
+        csv += `,,,${letter}\n`; 
     });
 
     // Add job applications
