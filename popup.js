@@ -175,7 +175,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
                 return;
             }
 
-            profiles[profilName]=[];
+            profiles[profileName]=[];
             chrome.storage.local.set({profiles}, ()=>
             {
                 loadProfiles();
@@ -237,7 +237,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
     profileSelector.addEventListener("change", ()=>
     {
         currentProfile= profileSelector.value;
-        loadFields;
+        loadFields();
     });
 
     
@@ -292,9 +292,10 @@ document.addEventListener("DOMContentLoaded", () => {
     function fillFormBasedOnMapping(linkedinData) {
         for (const linkedinField in fieldMappings) {
             const formField = fieldMappings[linkedinField];
-            const value = linkedinData[linkedinField];
+            const value = linkedinData[linkedinField] ||"";
 
-            if (value !== undefined) { // Check if the LinkedIn data exists for the field
+            if (value !== undefined) 
+            { 
                 const fieldElement = document.getElementById(formField);
                 if (fieldElement) {
                     if (formField === 'work-history') {
@@ -371,55 +372,26 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
+/*
 
-/*  incomplete code below - for SubTask 6
-    document.getElementById("saveForm").addEventListener("click", () => {
+    document.getElementById("save-form-btn").addEventListener("click", () => {
        
         const formData = {};
-        document.querySelectorAll("form input, form select, form textarea").forEach(field => {
-            formData[field.name] = field.value;
+        const inputs=document.querySelectorAll("input,select, textarea");
+        inputs.forEach(input =>
+        {
+            formData[input.id] = input.value;
         });
-    
-        const timestamp = new Date().toISOString();
-        const savedForm = {
-            id: timestamp,
-            data: formData,
-            saveDate: timestamp,
-            formName: "Job Application Form" 
-        };
-    
         
-        chrome.storage.sync.get({ savedForms: [] }, (result) => {
-            const updatedForms = [...result.savedForms, savedForm];
-            chrome.storage.sync.set({ savedForms: updatedForms }, () => {
-                alert("Form saved successfully!");
-            });
-        });
-    });
-
-
-    document.getElementById("loadHistory").addEventListener("click", () => {
-        chrome.storage.sync.get({ savedForms: [] }, (result) => {
-            const historyContainer = document.getElementById("historyContainer");
-            historyContainer.innerHTML = ""; 
-    
-            result.savedForms.forEach(form => {
-                const formDiv = document.createElement("div");
-                formDiv.innerHTML = `
-                    <p><strong>Form Name:</strong> ${form.formName}</p>
-                    <p><strong>Saved On:</strong> ${new Date(form.saveDate).toLocaleString()}</p>
-                    <button data-id="${form.id}" class="loadForm">Load</button>
-                    <button data-id="${form.id}" class="deleteForm">Delete</button>
-                `;
-                historyContainer.appendChild(formDiv);
-            });
-    
-            
-            document.querySelectorAll(".loadForm").forEach(button => {
-                button.addEventListener("click", loadForm);
-            });
-            document.querySelectorAll(".deleteForm").forEach(button => {
-                button.addEventListener("click", deleteForm);
+        const timestamp = new Date().toISOString();
+        chrome.storage.local.get({savedForms:{}}, (result)=>
+        {
+            const savedForms=result.savedForms;
+            savedForms[timestamp]=formData;
+            chrome.storage.local.set({savedForms},()=>
+            {
+                alert("Form saved succesfuly");
+                updateSavedFormList();
             });
         });
     });

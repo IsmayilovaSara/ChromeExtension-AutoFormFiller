@@ -3,7 +3,8 @@
     "name": "Auto Form Filler",
     "version": "1.0",
     "description": "Allows user to add or edit fields and save data locally",
-    "permissions": ["storage"],
+    "permissions": ["storage","activeTab", "scripting","downloads"],
+    "host_permissions":["*://*.linkedin.com/*"],
     "action": 
     {
         "default_popup": "popup.html",
@@ -14,6 +15,21 @@
             "128": "icon/FormIcon.png"
 
         }
-    }
+    },
+
+    "content_scripts":
+    [
+        {
+            "matches":["*://*.linkedin.com/*"],
+            "js":["content.js"]
+        }
+    ],
+    "web_accessible_resources":
+    [
+        {
+            "resources":["icon/*.png"],
+            "matches":["*//*/*"]
+        }
+    ]
 
 }
