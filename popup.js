@@ -498,7 +498,7 @@ document.getElementById('add-application-btn').addEventListener('click', functio
     document.getElementById('application-status').value = 'applied';
     document.getElementById('notes').value = '';
 });
-// Create sample data  to hold your application data
+//  sample data  to hold your application data
 let applicationData = {
     profiles: [],
     fields: [],
