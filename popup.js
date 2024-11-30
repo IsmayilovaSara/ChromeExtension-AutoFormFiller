@@ -248,9 +248,97 @@ document.addEventListener("DOMContentLoaded", ()=>{
     createProfileBtn.addEventListener("click", createProfile);
     deleteProfileBtn.addEventListener("click", deleteProfile);
     
-    loadFields();
+    loadProfiles();
+
+
+    //History Restoring
+    const SaveFormBtn = document.getElementById("save-form-btn");
+    const loadHistoryBtn = document.getElementById("load-history-btn");
+    const savedFormList = document.getElementById("load-history-btn");
+
+    SaveFormBtn.addEventListener("click", ()=>
+        {
+            const formData ={};
+            const inputs = document.querySelectorAll("input, select, textarea");
+
+            inputs.forEach((input)=>{
+                formData[input.id] = input.value;
+            });
+
+            const timestamp= new Date().toISOString();
+
+            chrome.storage.local.get({savedForms: {}}, (result)=>{
+                const savedForms = result.savedForms;
+                savedForms[timestamp] = formData;
+                
+                chrome.storage.local.set({savedForms}, ()=>
+                    {
+                        alert("Form saved succesfully");
+                        updateSavedFormsList();
+                    })
+                
+            });
+        });
     
     });
+
+    function updateSavedFormsList()
+    {
+        saved.FormsList.innerHTML ="";
+
+        chrome.storage.local.get({savedForms: {}}, (result)=>
+        {
+            const savedForms = result.savedForms;
+
+            for(const [timestamp, formData] of Object.entries(savedForms))
+            {
+                const option = document.createElement("option");
+                option.value = timestamp;
+                option.textContent = `Saved on ${new Date(timestamp).toLocaleString()}`;
+                updateSavedFormsList.appendChild(option);
+            }
+        });
+    }
+
+    loadHistoryBtn.addEventListener("click",()=>
+    {
+        const selectedTimestamp = savedFormList.value;
+
+        if(!selectedTimestamp)
+        {
+            alert("Please select saved form to load");
+            return;
+        }
+
+        chrome.storage.local.get({savedForms:{}}, (result)=>
+            {
+                const savedForms = result.savedForms;
+                const formData = savedForms[selectedTimestamp];
+                
+                if(formData)
+                {
+                    for (const [id,value] of Object.entries(formData))
+                    {
+                        const field = document.getElementById(id);
+                        if(field)
+                        {
+                            field.value = value;
+                        }
+                    }
+                    alert("Form loaded successfully!");
+                }
+                else
+                {
+                    alert("the selected form data could not be found");
+                }
+            });
+    });
+
+    updateSavedFormsList();
+
+
+
+
 
 document.addEventListener("DOMContentLoaded", () => {
     const mapFieldBtn = document.getElementById("map-field-btn");
@@ -369,35 +457,7 @@ document.addEventListener("DOMContentLoaded", () => {
             alert("Cover letter saved successfully!");
         });
     });
-
-
-
-/*
-
-    document.getElementById("save-form-btn").addEventListener("click", () => {
-       
-        const formData = {};
-        const inputs=document.querySelectorAll("input,select, textarea");
-        inputs.forEach(input =>
-        {
-            formData[input.id] = input.value;
-        });
-        
-        const timestamp = new Date().toISOString();
-        chrome.storage.local.get({savedForms:{}}, (result)=>
-        {
-            const savedForms=result.savedForms;
-            savedForms[timestamp]=formData;
-            chrome.storage.local.set({savedForms},()=>
-            {
-                alert("Form saved succesfuly");
-                updateSavedFormList();
-            });
-        });
-    });
-
-    */
-    
+  
     
 
 

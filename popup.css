@@ -5,13 +5,33 @@ body
     padding: 10px;
     width: 300px;
     height:400px;
+    overflow-y: auto;
 }
 
 h1
 {
     font-size: 18px;
     text-align:center;
+    margin-bottom: 20px;
+}
 
+section
+{
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+}
+
+section:last-of-type
+{
+    border-bottom:none;
+}
+
+h2
+{
+    font-size:16px;
+    margin-bottom: 10px;
+    color:#333;
 }
 
 #field-list
@@ -29,6 +49,7 @@ button
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    width: 90%;
 }
 
 button:hover
@@ -36,12 +57,14 @@ button:hover
 background-color: #0056b3;
 }
 
-input
+input,select,textarea
 {
     display:block;
     margin: 5px auto;
     padding: 5px;
     width: 90%;
+    border: 1px solid #ccc;
+    border-radius: 3px;
 }
 
 #new-field-form

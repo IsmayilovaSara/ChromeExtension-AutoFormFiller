@@ -15,21 +15,6 @@
             "128": "icon/FormIcon.png"
 
         }
-    },
-
-    "content_scripts":
-    [
-        {
-            "matches":["*://*.linkedin.com/*"],
-            "js":["content.js"]
-        }
-    ],
-    "web_accessible_resources":
-    [
-        {
-            "resources":["icon/*.png"],
-            "matches":["*//*/*"]
-        }
-    ]
+    }
 
 }
