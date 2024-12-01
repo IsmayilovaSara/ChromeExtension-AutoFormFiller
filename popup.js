@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
     const deleteProfileBtn = document.getElementById("delete-profile-btn");
     const profileSelector = document.getElementById("profile-selector");
     
-    let isEditMode = false;  //checks if we are editting
+    let isEditMode = -1;  //checks if we are editting
     let editIndex = null;   //checks the index of the field being editted
     let currentProfile = null;
 
@@ -50,10 +50,10 @@ document.addEventListener("DOMContentLoaded", ()=>{
         }
     
     
-    chrome.storage.local.get("fields",(result)=>
+    chrome.storage.local.get("profiles",(result)=>
     {
         const profiles = result.profiles || {};
-        const fields = result.fields || [];
+        const fields = profiles[currentProfile] || [];
     
         if(isEditMode)
         {
@@ -67,7 +67,9 @@ document.addEventListener("DOMContentLoaded", ()=>{
         }
         
         profiles[currentProfile] = fields;
-        chrome.storage.local.set({fields}, ()=>
+        console.log(`Profiles to save:`, profiles);
+
+        chrome.storage.local.set({profiles}, ()=>
         {
             loadFields();
             resetForm();
@@ -92,6 +94,9 @@ document.addEventListener("DOMContentLoaded", ()=>{
         {
             const profiles = result.profiles || {};
             const fields = profiles[currentProfile] || [];
+            console.log(`Field for currentProfile:`, fields);
+
+
             fieldList.innerHTML = "";
             
             fields.forEach((field,index) =>  
@@ -140,6 +145,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
             const fields = profiles[currentProfile] || [];
             fields.splice(index, 1);
             profiles[currentProfile]=fields;
+            console.log(`Profiles after field deletion:`, profiles);
 
             chrome.storage.local.set({profiles},()=>
             {
@@ -176,6 +182,8 @@ document.addEventListener("DOMContentLoaded", ()=>{
             }
 
             profiles[profileName]=[];
+            console.log(`Profiles before adding new profile:`, profiles);
+
             chrome.storage.local.set({profiles}, ()=>
             {
                 loadProfiles();
@@ -197,6 +205,8 @@ document.addEventListener("DOMContentLoaded", ()=>{
         chrome.storage.local.get("profiles", (result) =>
         {
             const profiles =result.profiles || {};
+            console.log(`Profiles before deletion:`, profiles);
+
             delete profiles[currentProfile];
 
             chrome.storage.local.set({profiles}, ()=> 
@@ -204,7 +214,8 @@ document.addEventListener("DOMContentLoaded", ()=>{
                 currentProfile = null;
                 loadProfiles();
                 loadFields();
-                alert("Profile deleted successfully");             
+                alert("Profile deleted successfully");      
+                console.log(`Profiles after deletion:`, profiles);       
                 
             });
         });
@@ -215,6 +226,8 @@ document.addEventListener("DOMContentLoaded", ()=>{
         chrome.storage.local.get("profiles",(result) =>
         {
             const profiles = result.profiles || {};
+            console.log(`profiles loaded:`, profiles);
+
             profileSelector.innerHTML="";
 
             Object.keys(profiles).forEach((profile)=>
