@@ -568,23 +568,21 @@ function convertToCSV(data) {
 }
 
 // import data
-document.getElementById('import-data-btn').addEventListener('click', () => {
-    const fileInput = document.getElementById('import-data-file');
-    const file = fileInput.files[0];
-    
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function(event) {
-            const data = JSON.parse(event.target.result);
-            applicationData = data; 
-            alert('Data imported successfully!');
-            
-        };
-        reader.readAsText(file);
-    } else {
-        alert('Please select a file to import.');
-    }
-});
+const fileInput = document.getElementById('import-data-file');
+const file = fileInput.files[0];
+
+if (file) {
+    const reader = new FileReader();
+    reader.onload = function(event) {
+        const data = JSON.parse(event.target.result);
+        applicationData = data;
+        alert('Data imported successfully!');
+    };
+    reader.readAsText(file);
+} else {
+    alert('Please select a file to import.');
+}
+
 
 // send data via email 
 document.getElementById('send-data-email-btn').addEventListener('click', () => {
@@ -594,12 +592,31 @@ document.getElementById('send-data-email-btn').addEventListener('click', () => {
         alert('Please enter an email address.');
         return;
     }
-    
-    const dataStr = JSON.stringify(applicationData, null, 2);
-    
 
-    alert(`Data sent to ${email}:\n\n${dataStr}`);
-    
+    const emailData = {
+        sender: { email: "your-email@example.com" },
+        to: [{ email: email }],
+        subject: "Job Application Data",
+        htmlContent: `<pre>${JSON.stringify(applicationData, null, 2)}</pre>`,
+    };
+//Sendinblue Free API
+    fetch("https://api.sendinblue.com/v3/smtp/email", {
+        method: "POST",
+        headers: {
+            "api-key": "YOUR_SENDINBLUE_API_KEY",
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(emailData),
+    })
+    .then((response) => {
+        if (!response.ok) {
+            throw new Error("Error sending email");
+        }
+        alert("Data sent to " + email);
+    })
+    .catch((error) => {
+        console.error("Error:", error);
+        alert("Failed to send email.");
+    });
 });
-
 
