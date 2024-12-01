@@ -409,39 +409,46 @@ document.addEventListener("DOMContentLoaded", () => {
     const jobTitleInput = document.getElementById("job-title-input"); // New input for job title
     const companyNameInput = document.getElementById("company-name-input"); // New input for company name
 
-   
+   // Automatic Cover Letter Generation 
+    
     async function generateCoverLetter() {
-        const jobTitle = jobTitleInput.value.trim(); // Get job title from the input
-        const companyName = companyNameInput.value.trim(); // Get company name from the input
+    const jobTitle = jobTitleInput.value.trim();
+    const companyName = companyNameInput.value.trim();
 
-        if (!jobTitle || !companyName) {
-            alert("Job title and company name are required to generate a cover letter.");
-            return;
-        }
-
-        // AI to generate cover letter
-        try {
-            const response = await fetch("https://api.example.com/generate-cover-letter", {  
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ jobTitle, companyName }),
-            });
-
-            if (!response.ok) {
-                throw new Error("Network response was not ok");
-            }
-
-            const data = await response.json();
-            coverLetterOutput.value = data.coverLetter; 
-        } catch (error) {
-            console.error("Error generating cover letter:", error);
-            alert("Failed to generate cover letter. Please try again.");
-        }
+    if (!jobTitle || !companyName) {
+        alert("Job title and company name are required to generate a cover letter.");
+        return;
     }
+// Add Zyro AI Content Generator (Free Tier) 
+    try {
+        const response = await fetch("https://api.zyro.com/v1/content/generate", {
+            method: "POST",
+            headers: {
+                "Authorization": "Bearer YOUR_API_KEY",
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                type: "cover-letter",
+                jobTitle: jobTitle,
+                companyName: companyName,
+            }),
+        });
 
+        if (!response.ok) {
+            throw new Error("Failed to fetch from Zyro API");
+        }
+
+        const data = await response.json();
+        coverLetterOutput.value = data.result; 
+    } catch (error) {
+        console.error("Error generating cover letter:", error);
+        alert("Failed to generate cover letter. Please try again.");
+    }
+}
+
+   
     //  Job Application Tracking Dashboard
+    
     generateCoverLetterBtn.addEventListener("click", generateCoverLetter);
 
     
