@@ -33,3 +33,15 @@ Ensures the user's fields and selected profile are preserved even after closing.
 
 
 Aliya Zulfugarli:
+ Form Field Mapping -users connect their data LinkedIn fields to specific form fields.
+Save these connections for future use.
+4. Automatic Cover Letter Generation 
+Use job titles and company names from the application to create custom cover letters.
+	
+
+Job Application Tracker -track details like company, job title, and application dates.
+Allow users to update application status (“Submitted” or “Interview Scheduled”).
+
+ History Restoring Save completed forms for later use. users restore and edit these forms before resubmitting.
+
+ Data Transfer  users to export and import their data .Provide an option to send exported data via email.
